@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .sm\:py-32{
+      background-color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="sm:py-32">div</div>
+</body>
+<script>
+    // Logos 
+(function () {
+  const wrapper = document.querySelector(".section-integration-logos");
+
+  // Select all stems inside the wrapper
+  const stems = wrapper.querySelectorAll(".arrow-stem");
+
+  // Select all tips inside the wrapper
+  const tips1 = wrapper.querySelectorAll(".arrow-tip-1");
+  const tips2 = wrapper.querySelectorAll(".arrow-tip-2");
+
+  const preparePath = (el) => {
+    if (!el) return;
+    const len = el.getTotalLength();
+    gsap.set(el, { strokeDasharray: len, strokeDashoffset: len, autoAlpha: 0 });
+  };
+
+  // Prepare all paths
+  stems.forEach(preparePath);
+  tips1.forEach(preparePath);
+  tips2.forEach(preparePath);
+
+  // Single timeline for all arrows
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: ".section-home-features", // same trigger for all
+      start: "bottom 50%",
+      end: "bottom 25%",
+      scrub: 1,
+
+    }
+  });
+
+  // Animate all stems together
+  tl.to(stems, { autoAlpha: 1, duration: 0.01 })
+    .to(stems, { strokeDashoffset: 0, ease: "none" });
+
+  // Animate all tips together if they exist
+  if (tips1.length && tips2.length) {
+    tl.to([tips1, tips2], { autoAlpha: 1, duration: 0.01 }, ">")
+      .to([tips1, tips2], { strokeDashoffset: 0, ease: "power1.out" }, "<");
+  }
+})();
+</script>
+
+<div class="class"></div>
+</html>
